@@ -81,7 +81,9 @@ func newFrameBuffer(screenSize string) (*frameBuffer, error) { //nolint:funlen
 		xvfb.SysProcAttr = new(syscall.SysProcAttr)
 	}
 
-	xvfb.SysProcAttr.Pdeathsig = syscall.SIGKILL
+	if _, ok := os.LookupEnv("LAMBDA_TASK_ROOT"); !ok {
+		xvfb.SysProcAttr.Pdeathsig = syscall.SIGKILL
+	}
 
 	if err := xvfb.Start(); err != nil {
 		return nil, err

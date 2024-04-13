@@ -32,8 +32,11 @@ func headlessOpts() (opts []chromedp.ExecAllocatorOption, cleanup func() error, 
 			cmd.SysProcAttr = new(syscall.SysProcAttr)
 		}
 
-		// When the parent process dies (Go), kill all the chid processes as well.
-		cmd.SysProcAttr.Pdeathsig = syscall.SIGKILL
+		if _, ok := os.LookupEnv("LAMBDA_TASK_ROOT"); !ok {
+			// When the parent process dies (Go), kill all the chid processes as well.
+			cmd.SysProcAttr.Pdeathsig = syscall.SIGKILL
+		}
+
 	})
 
 	return []chromedp.ExecAllocatorOption{opt}, frameBuffer.Stop, nil
