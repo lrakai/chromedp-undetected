@@ -118,7 +118,7 @@ func newFrameBuffer(screenSize string) (*frameBuffer, error) { //nolint:funlen
 			return nil, errors.New("xvfb did not print the display number")
 		}
 
-	case <-time.After(10 * time.Second):
+	case <-time.After(120 * time.Second):
 		return nil, errors.New("timeout waiting for Xvfb")
 	}
 
